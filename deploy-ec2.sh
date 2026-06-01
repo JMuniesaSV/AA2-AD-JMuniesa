@@ -58,8 +58,8 @@ fi
 
 # --- 5. Levantar la base de datos y la aplicación con Docker Compose ---
 echo "[5/6] Levantando servicios con Docker Compose..."
-docker-compose -f docker-compose.dev.yaml down --remove-orphans || true
-docker-compose -f docker-compose.dev.yaml up -d --build
+docker-compose -f docker-compose.prod.yml down --remove-orphans || true
+docker-compose -f docker-compose.prod.yml up -d --build
 
 # --- 6. Comprobar que el servicio está disponible ---
 echo "[6/6] Esperando que la aplicación arranque..."
@@ -73,6 +73,6 @@ if curl -sf http://localhost:8080/drivers > /dev/null; then
 else
     echo ""
     echo "[ERROR] La aplicación no respondió a tiempo. Revisa los logs con:"
-    echo "        docker-compose -f docker-compose.dev.yaml logs app"
+    echo "        docker-compose -f docker-compose.prod.yml logs api-prod"
     exit 1
 fi
