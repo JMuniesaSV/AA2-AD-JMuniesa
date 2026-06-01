@@ -1,0 +1,371 @@
+{
+    "info": {
+        "_postman_id": "transport-fleet",
+        "name": "TransportFleetAA2AWS",
+        "description": "Colección completa",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Stations",
+            "item": [
+                {
+                    "name": "List & Filter Stations",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/stations?category=Logística&disabledAccess=true&postalCode=50001",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "stations"
+                            ],
+                            "query": [
+                                {
+                                    "key": "category",
+                                    "value": "Logística",
+                                    "description": "Filtrar por categoría"
+                                },
+                                {
+                                    "key": "disabledAccess",
+                                    "value": "true",
+                                    "description": "Filtrar por acceso minusválidos"
+                                },
+                                {
+                                    "key": "postalCode",
+                                    "value": "50001",
+                                    "description": "Filtrar por código postal"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Station",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Estación Norte\",\n    \"description\": \"Punto de transbordo\",\n    \"category\": \"Logística\",\n    \"streetLocated\": \"Av. Pirineos 4\",\n    \"postalCode\": 50015,\n    \"registerDate\": \"2024-05-07\",\n    \"disabledAccess\": true,\n    \"longitude\": 41.6,\n    \"latitude\": -0.8\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/stations"
+                    }
+                },
+                {
+                    "name": "Get Station By ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "http://13.217.51.72:8080/stations/1"
+                    }
+                },
+                {
+                    "name": "Update Station",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Estación Norte Modificada\",\n    \"category\": \"Logística avanzada\"\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/stations/1"
+                    }
+                },
+                {
+                    "name": "Delete Station",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "http://13.217.51.72:8080/stations/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Routes",
+            "item": [
+                {
+                    "name": "List & Filter Routes",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/routes?category=Express&stationName=Estación&price=200",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "routes"
+                            ],
+                            "query": [
+                                {
+                                    "key": "category",
+                                    "value": "Express"
+                                },
+                                {
+                                    "key": "stationName",
+                                    "value": "Estación"
+                                },
+                                {
+                                    "key": "price",
+                                    "value": "200"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Route",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Ruta ZGZ-BCN\",\n    \"description\": \"Trayecto directo\",\n    \"routeDate\": \"2024-05-20\",\n    \"category\": \"Nacional\",\n    \"capacity\": 50,\n    \"price\": 80.0,\n    \"stationId\": 1,\n    \"driversIds\": [1]\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/routes"
+                    }
+                },
+                {
+                    "name": "Get Route By ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "http://13.217.51.72:8080/routes/1"
+                    }
+                },
+                {
+                    "name": "Delete Route",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "http://13.217.51.72:8080/routes/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Drivers",
+            "item": [
+                {
+                    "name": "List & Filter Drivers",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/drivers?type=Fijo&active=true&orderByExperience=true",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "drivers"
+                            ],
+                            "query": [
+                                {
+                                    "key": "type",
+                                    "value": "Fijo"
+                                },
+                                {
+                                    "key": "active",
+                                    "value": "true"
+                                },
+                                {
+                                    "key": "orderByExperience",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Driver",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Pedro\",\n    \"surname\": \"García\",\n    \"licenseCategory\": \"C\",\n    \"birthDate\": \"1980-05-05\",\n    \"type\": \"Fijo\",\n    \"experience\": 15,\n    \"height\": 1.80,\n    \"active\": true\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/drivers"
+                    }
+                },
+                {
+                    "name": "List & Filter Drivers (V2)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/v2/drivers",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "v2",
+                                "drivers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Driver (V2)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Pedro V2\",\n    \"surname\": \"García\",\n    \"licenseCategory\": \"C\",\n    \"birthDate\": \"1980-05-05\",\n    \"type\": \"Fijo\",\n    \"experience\": 15,\n    \"height\": 1.80,\n    \"active\": true\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/v2/drivers"
+                    }
+                },
+                {
+                    "name": "Modify Driver (V2)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Pedro V2 Modificado\",\n    \"surname\": \"García\",\n    \"licenseCategory\": \"C\",\n    \"birthDate\": \"1980-05-05\",\n    \"type\": \"Fijo\",\n    \"experience\": 20,\n    \"height\": 1.80,\n    \"active\": true\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/v2/drivers/1"
+                    }
+                },
+                {
+                    "name": "Delete Driver (V2)",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "http://13.217.51.72:8080/v2/drivers/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "List & Filter Users",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/users?name=John&active=true",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "users"
+                            ],
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "John"
+                                },
+                                {
+                                    "key": "active",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"admin\",\n    \"name\": \"Admin\",\n    \"surname\": \"System\",\n    \"birthDate\": \"1980-01-01\",\n    \"telephoneNumber\": 999999999,\n    \"active\": true\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/users"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Feedbacks",
+            "item": [
+                {
+                    "name": "List & Filter Feedbacks",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://13.217.51.72:8080/feedbacks?rating=4.0",
+                            "protocol": "http",
+                            "host": [
+                                "13.217.51.72"
+                            ],
+                            "port": "8080",
+                            "path": [
+                                "feedbacks"
+                            ],
+                            "query": [
+                                {
+                                    "key": "rating",
+                                    "value": "4.0",
+                                    "description": "Calificación mayor que"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Feedback",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"rating\": 5.0,\n    \"comment\": \"Perfecto\",\n    \"registerDate\": \"2024-05-07\",\n    \"visible\": true,\n    \"helpfulCount\": 0,\n    \"recommend\": true,\n    \"routeId\": 1,\n    \"userId\": 1\n}"
+                        },
+                        "url": "http://13.217.51.72:8080/feedbacks"
+                    }
+                }
+            ]
+        }
+    ]
+}

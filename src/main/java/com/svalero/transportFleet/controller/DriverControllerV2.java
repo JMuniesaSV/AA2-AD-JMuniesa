@@ -31,7 +31,8 @@ public class DriverControllerV2 {
     @Autowired
     private ModelMapper modelMapper;
 
-    // GET modificado: Devuelve un DriverSummaryV2Dto en lugar de DriverOutDto, reduciendo la cantidad de datos
+    // GET modificado: Devuelve un DriverSummaryV2Dto en lugar de DriverOutDto,
+    // reduciendo la cantidad de datos
     @GetMapping
     public ResponseEntity<List<DriverSummaryV2Dto>> getAll(
             @RequestParam(value = "type", required = false) String type,
@@ -53,7 +54,8 @@ public class DriverControllerV2 {
         return ResponseEntity.ok(summaryList);
     }
 
-    // POST modificado: Utiliza un DriverInV2Dto específico para entrada con validaciones distintas y retorna un resumen envuelto
+    // POST modificado: Utiliza un DriverInV2Dto específico para entrada con
+    // validaciones distintas y retorna un resumen envuelto
     @PostMapping
     public ResponseEntity<Map<String, Object>> addDriver(@Valid @RequestBody DriverInV2Dto driverInV2Dto) {
         Driver driver = modelMapper.map(driverInV2Dto, Driver.class);
@@ -72,9 +74,11 @@ public class DriverControllerV2 {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // PUT modificado: Recibe DriverInV2Dto en lugar del dominio entero y devuelve respuesta estandarizada
+    // PUT modificado: Recibe DriverInV2Dto en lugar del dominio entero y devuelve
+    // respuesta estandarizada
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> modifyDriver(@PathVariable long id, @Valid @RequestBody DriverInV2Dto driverInV2Dto) throws DriverNotFoundException {
+    public ResponseEntity<Map<String, Object>> modifyDriver(@PathVariable long id,
+            @Valid @RequestBody DriverInV2Dto driverInV2Dto) throws DriverNotFoundException {
         Driver driver = modelMapper.map(driverInV2Dto, Driver.class);
         Driver newDriver = driverService.modify(id, driver);
 
@@ -91,7 +95,8 @@ public class DriverControllerV2 {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE modificado: En lugar de 204 No Content, devuelve un JSON de confirmación explícito 200 OK
+    // DELETE modificado: En lugar de 204 No Content, devuelve un JSON de
+    // confirmación explícito 200 OK
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteDriver(@PathVariable long id) throws DriverNotFoundException {
         driverService.delete(id);
