@@ -44,7 +44,7 @@ fi
 
 # --- 4. Clonar o actualizar el repositorio ---
 REPO_DIR="/home/ec2-user/transportFleet"
-REPO_URL="https://github.com/TU_USUARIO/TU_REPOSITORIO.git"  # <-- CAMBIAR
+REPO_URL="https://github.com/JMuniesaSV/AA2-AD-JMuniesa"  # <-- CAMBIAR
 
 if [ -d "$REPO_DIR" ]; then
     echo "[4/6] Actualizando repositorio..."
