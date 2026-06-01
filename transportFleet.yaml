@@ -1,0 +1,1054 @@
+openapi: 3.0.1
+info:
+  title: TransportFleet
+  description: API de gestión de flota de transportes.
+  version: 1.0.0
+servers:
+  - url: 'https://transportFleet.com'
+paths:
+  /routes:
+    get:
+      summary: Lista de rutas
+      description: | 
+        Nos devuelve una lista completa con todas las rutas. 
+        Se puede realizar búsqueda tanto de la lista completa como realizar un filtrado tanto por categoría de ruta como por nombre de la estación.
+      parameters:
+        - name: category
+          in: query
+          description: Filtra por categoría de la ruta
+          required: false
+          schema:
+            type: string
+        - name: stationName
+          in: query
+          description: Filtra por nombre de la estación de la ruta
+          required: false
+          schema:
+            type: string
+        - name: price
+          in: query
+          description: Filtra por precio inferior o igual al parámetro y los ordena ascendentemente
+          required: false
+          schema:
+            type: number
+            format: float
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteOutDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar ruta
+      description: Nos permite registrar una nueva ruta en nuestra base de datos.
+      requestBody:
+        description: Los datos de la nueva ruta
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteInDto'
+      responses:
+        '201':
+          description: Ruta registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /routes/{id}:
+    get:
+      summary: Vista de una ruta
+      description: Devuelve la vista detallada de una ruta. Búsqueda por Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      summary: Editar una ruta
+      description: Modifica los datos de una ruta por Id.
+      requestBody:
+        description: Datos a sobreescribir.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteModifyInDto'
+      responses:
+        '200':
+          description: Ruta modificada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      summary: Borrar ruta
+      description: Elimina una ruta por Id.
+      responses:
+        '204':
+          description: Ruta eliminada.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /stations:
+    get:
+      summary: Lista de estaciones
+      description: |
+        Nos devuelve una lista con todas las estaciones.
+      parameters:
+        - name: disabledAccess
+          in: query
+          description: Filtra por estaciones con acceso adaptado.
+          required: false
+          schema:
+            type: boolean
+        - name: category
+          in: query
+          description: Filtra por categoría
+          required: false
+          schema:
+            type: string
+        - name: postalCode
+          in: query
+          description: Filtra por código postal
+          schema:
+            type: number
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StationOutDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar estación
+      description: Registra una estación.
+      requestBody:
+        description: Datos de la nueva estación
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '201':
+          description: Estación registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /stations/{id}:
+    get:
+      summary: Vista de una estación
+      description: Detalle de una estación por Id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Station'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      summary: Editar una estación
+      description: Modifica una estación por Id.
+      requestBody:
+        description: Datos a sobreescribir.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '200':
+          description: Estación registrada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Station'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      summary: Borrar estación
+      description: Elimina una estación por Id.
+      responses:
+        '204':
+          description: Estación eliminada.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /drivers:
+    get:
+      summary: Lista de conductores
+      description: |
+        Nos devuelve una lista completa con todos los conductores.
+      parameters:
+        - name: type
+          in: query
+          description: Filtra por tipo de conductor.
+          required: false
+          schema:
+            type: string
+        - name: active
+          in: query
+          description: Filtra por conductores en activo.
+          required: false
+          schema:
+            type: boolean
+        - name: orderByExperience
+          in: query
+          description: Ordena por experiencia.
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar conductor
+      description: Registra un nuevo conductor.
+      requestBody:
+        description: Datos del nuevo conductor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '201':
+          description: Conductor registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /drivers/{id}:
+    get:
+      summary: Vista de un conductor
+      description: Detalle de un conductor por Id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      summary: Editar un conductor
+      description: Modifica un conductor por Id.
+      requestBody:
+        description: Datos a sobreescribir.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '200':
+          description: Conductor registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      summary: Borrar conductor
+      description: Elimina un conductor por Id.
+      responses:
+        '204':
+          description: Conductor eliminado.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /feedbacks:
+    get:
+      summary: Lista de feedbacks.
+      description: Nos devuelve una lista completa con todos los feedbacks.
+      parameters:
+        - name: username
+          in: query
+          description: Filtra por username.
+          required: false
+          schema:
+            type: string
+        - name: routeName
+          in: query
+          description: Filtra por nombre de ruta.
+          required: false
+          schema:
+            type: string
+        - name: rating
+          in: query
+          description: Filtra por valoración.
+          required: false
+          schema:
+            type: number
+            format: float
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedbackOutDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar feedback
+      description: Registra un nuevo feedback.
+      requestBody:
+        description: Datos del nuevo feedback
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackInDto'
+      responses:
+        '201':
+          description: Feedback registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /feedbacks/{id}:
+    get:
+      summary: Vista de un feedback
+      description: Detalle de un feedback por Id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedback'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      summary: Editar un feedback
+      description: Modifica un feedback por Id.
+      requestBody:
+        description: Datos a sobreescribir.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackModifyInDto'
+      responses:
+        '200':
+          description: Feedback registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      summary: Borrar feedback
+      description: Elimina un feedback por Id.
+      responses:
+        '204':
+          description: Feedback eliminado.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /users:
+    get:
+      summary: Lista de usuarios
+      description: Nos devuelve una lista con todos los usuarios.
+      parameters:
+        - name: name
+          in: query
+          description: Filtra por nombre
+          required: false
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Filtra por fecha de nacimiento
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: active
+          in: query
+          description: Filtra por activos
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar usuario
+      description: Registra un nuevo usuario.
+      requestBody:
+        description: Datos del nuevo usuario
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInDto'
+      responses:
+        '201':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /users/{id}:
+    get:
+      summary: Vista de un usuario
+      description: Detalle de un usuario por Id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      summary: Editar un usuario
+      description: Modifica un usuario por Id.
+      requestBody:
+        description: Datos a sobreescribir.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInDto'
+      responses:
+        '200':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      summary: Borrar usuario
+      description: Elimina un usuario por Id.
+      responses:
+        '204':
+          description: Usuario eliminado.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    Route:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        routeDate:
+          type: string
+          format: date
+        category:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: number
+          format: float
+        availability:
+          type: boolean
+    RouteInDto:
+      type: object
+      required:
+        - name
+        - category
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        routeDate:
+          type: string
+          format: date
+        category:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: number
+          format: float
+        stationId:
+          type: integer
+          format: int64
+        driversIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    RouteModifyInDto:
+      allOf:
+        - $ref: '#/components/schemas/RouteInDto'
+      type: object
+      properties:
+        availability:
+          type: boolean
+    RouteOutDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        routeDate:
+          type: string
+          format: date
+        category:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: number
+          format: float
+        availability:
+          type: boolean
+    Station:
+      type: object
+      required:
+        - name
+        - category
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        streetLocated:
+          type: string
+        postalCode:
+          type: integer
+        registerDate:
+          type: string
+          format: date
+        disabledAccess:
+          type: boolean
+        longitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+    StationInDto:
+      allOf:
+        - $ref: '#/components/schemas/Station'
+      type: object
+    StationOutDto:
+      allOf:
+        - $ref: '#/components/schemas/Station'
+      type: object
+    Driver:
+      type: object
+      required:
+        - name
+        - surname
+        - licenseCategory
+        - type
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        surname:
+          type: string
+        licenseCategory:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        type:
+          type: string
+        experience:
+          type: integer
+        height:
+          type: number
+          format: float
+        active:
+          type: boolean
+    DriverInDto:
+      allOf:
+        - $ref: '#/components/schemas/Driver'
+      type: object
+    DriverOutDto:
+      allOf:
+        - $ref: '#/components/schemas/Driver'
+      type: object
+    Feedback:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        rating:
+          type: number
+          format: float
+        comment:
+          type: string
+        registerDate:
+          type: string
+          format: date
+        visible:
+          type: boolean
+        helpfulCount:
+          type: integer
+        recommend:
+          type: boolean
+    FeedbackInDto:
+      type: object
+      properties:
+        rating:
+          type: number
+          format: float
+        comment:
+          type: string
+        registerDate:
+          type: string
+          format: date
+        visible:
+          type: boolean
+        helpfulCount:
+          type: integer
+        recommend:
+          type: boolean
+        routeId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+    FeedbackModifyInDto:
+      allOf:
+        - $ref: '#/components/schemas/FeedbackInDto'
+      type: object
+    FeedbackOutDto:
+      allOf:
+        - $ref: '#/components/schemas/Feedback'
+      type: object
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        telephoneNumber:
+          type: integer
+        active:
+          type: boolean
+    UserInDto:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      type: object
+    UserOutDto:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      type: object
+    BadRequest:
+      type: object
+      properties:
+        code:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+    NotFound:
+      type: object
+      properties:
+        code:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+    InternalServerError:
+      type: object
+      properties:
+        code:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string

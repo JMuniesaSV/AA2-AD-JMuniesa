@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: transportfleet-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_segura
+      MYSQL_DATABASE: transportFleet_database
+      MYSQL_USER: transportFleet_user
+      MYSQL_PASSWORD: transportFleet_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  api-prod:
+    build: .
+    container_name: transportfleet-api-prod
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+    depends_on:
+      - mariadb
+
+volumes:
+  mariadb_data:

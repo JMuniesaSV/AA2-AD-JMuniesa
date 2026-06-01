@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+
+  # -------------------------------------------------------
+  # APIMan Gateway + Manager (todo en uno con WildFly)
+  # -------------------------------------------------------
+  apiman:
+    image: apiman/on-wildfly:3.1.2.Final
+    container_name: apiman
+    ports:
+      - "8085:8080"    # Consola de gestión de APIMan
+      - "8443:8443"    # Gateway HTTPS
+    environment:
+      APIMAN_MANAGER_UI_URL: "http://localhost:8085/apimanui"
+      APIMAN_GATEWAY_ENDPOINT: "http://localhost:8085/apiman-gateway"
+    networks:
+      - apiman-net
+    restart: unless-stopped
+
+networks:
+  apiman-net:
+    driver: bridge

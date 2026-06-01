@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:localhost}:${DB_PORT:3308}/transportFleet_database
+    username: transportFleet_user
+    password: transportFleet_password
+    driverClassName: org.mariadb.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
