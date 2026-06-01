@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker volumes ###
+mariadb_data/
+
+### AWS keys ###
+*.pem
