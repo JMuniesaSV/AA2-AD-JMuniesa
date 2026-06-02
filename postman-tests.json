@@ -253,7 +253,7 @@
     },
     {
       "name": "APIMan Gateway",
-      "description": "Peticiones a través del gateway de APIMan. Requiere APIMan Gateway corriendo en :8082 y una API Key válida. Configura la variable de entorno 'apiKey' antes de ejecutar.",
+      "description": "Peticiones a través del gateway de APIMan. Requiere APIMan Gateway corriendo en :8082.",
       "item": [
         {
           "name": "GET Drivers via APIMan Gateway",
@@ -279,21 +279,21 @@
             "header": [
               {
                 "key": "X-API-Key",
-                "value": "{{apiKey}}",
+                "value": "a7d6b2dd-7d51-49a9-9aae-a84bb35d2fef",
                 "description": "API Key generada en APIMan al registrar el Client App"
               }
             ],
             "url": {
-              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/JMuniesa/transportFleet/2.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
               "port": "8082",
               "path": [
-                "svalero",
+                "JMuniesa",
                 "transportFleet",
-                "1.0",
+                "2.0",
                 "v2",
                 "drivers"
               ]
@@ -329,7 +329,7 @@
               },
               {
                 "key": "X-API-Key",
-                "value": "{{apiKey}}",
+                "value": "a7d6b2dd-7d51-49a9-9aae-a84bb35d2fef",
                 "description": "API Key generada en APIMan al registrar el Client App"
               }
             ],
@@ -338,16 +338,16 @@
               "raw": "{\n    \"name\": \"Gateway\",\n    \"surname\": \"Test\",\n    \"licenseCategory\": \"B\",\n    \"birthDate\": \"1995-06-15\",\n    \"type\": \"Fijo\",\n    \"experience\": 3,\n    \"height\": 1.70,\n    \"active\": true\n}"
             },
             "url": {
-              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/JMuniesa/transportFleet/2.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
               "port": "8082",
               "path": [
-                "svalero",
+                "JMuniesa",
                 "transportFleet",
-                "1.0",
+                "2.0",
                 "v2",
                 "drivers"
               ]
@@ -355,14 +355,14 @@
           }
         },
         {
-          "name": "GET Drivers sin API Key (debe dar 401)",
+          "name": "GET Drivers sin API Key (debe dar 403)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 401 Unauthorized\", function () {",
-                  "    pm.response.to.have.status(401);",
+                  "pm.test(\"Status code is 403 Unauthorized\", function () {",
+                  "    pm.response.to.have.status(403);",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -373,16 +373,16 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/JMuniesa/transportFleet/2.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
               "port": "8082",
               "path": [
-                "svalero",
+                "JMuniesa",
                 "transportFleet",
-                "1.0",
+                "2.0",
                 "v2",
                 "drivers"
               ]

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mariadb:
-    image: mariadb:10.11
+    image: mariadb:11.3.2
     container_name: transportfleet-db
     restart: always
     environment:
