@@ -1,0 +1,141 @@
+version: '3.9'
+services:
+  apiman-manager:
+    image: apiman/wildfly-manager:3.1.3.Final
+    depends_on:
+      - postgres
+      - keycloak
+    ports:
+      - "8081:8080" # Tu PC entra por el 8081
+    environment:
+      - "APIMAN_AUTH_URL=http://keycloak:8080"
+      - "APIMAN_AUTH_PUBLIC_URL=http://localhost:8085" # Redirige al Keycloak expuesto
+      - "APIMAN_AUTH_REALM=${KEYCLOAK_REALM}"
+      - "APIMAN_AUTH_API_SECRET=${KEYCLOAK_APIMAN_API_SECRET}"
+      - "APIMAN_AUTH_UI_SECRET=${KEYCLOAK_APIMAN_UI_SECRET}"
+      - "APIMAN_DB_DRIVER=postgresql11"
+      - "APIMAN_DB_URL=jdbc:postgresql://postgres:5432/apiman"
+      - "APIMAN_DB_USERNAME=${POSTGRES_USERNAME}"
+      - "APIMAN_DB_PASSWORD=${POSTGRES_PASSWORD}"
+      - "APIMAN_ES_PROTOCOL=${ELASTICSEARCH_PROTOCOL}"
+      - "APIMAN_ES_HOST=${ELASTICSEARCH_HOST}"
+      - "APIMAN_ES_PORT=${ELASTICSEARCH_PORT}"
+      - "APIMAN_ES_ALLOW_SELF_SIGNED=true"
+      - "APIMAN_ES_ALLOW_ANY_HOST=true"
+      - "APIMAN_ES_TRUST_ALL=true"
+      - "APIMAN_MANAGER_UI_ENDPOINT=http://apiman.${APIMAN_HOSTNAME}:${HTTP_PORT}/apimanui/api-manager/"
+      - "APIMAN_MANAGER_API_ENDPOINT=http://apiman.${APIMAN_HOSTNAME}:${HTTP_PORT}/apiman"
+    volumes:
+      - type: bind
+        source: "$PWD/data/apiman.properties"
+        target: /opt/jboss/wildfly/standalone/configuration/apiman.properties
+      - type: bind
+        source: "$PWD/data/default-gateway.json"
+        target: /opt/jboss/wildfly/standalone/data/bootstrap/default-gateway.json
+    restart: unless-stopped
+
+  apiman-gateway:
+    image: apiman/vertx-gateway:3.1.3.Final
+    depends_on:
+      elasticsearch:
+          condition: service_healthy
+    ports:
+      - "8082:8080"
+    environment:
+      - >-
+        APIMAN_GATEWAY_OPTS=-Dapiman.gateway.public-endpoint=http://localhost:8082
+        -Dapiman.es.host=${ELASTICSEARCH_HOST}
+        -Dapiman.es.protocol=${ELASTICSEARCH_PROTOCOL}
+        -Dapiman.es.port=${ELASTICSEARCH_PORT}
+        -Dapiman.es.timeout=10000
+        -Dapiman.auth.url=http://keycloak:8080
+        -Dapiman.auth.realm=${KEYCLOAK_REALM}
+        -Dapiman.auth.gateway.secret=${KEYCLOAK_GATEWAY_SECRET}
+        -Dapiman.auth.public-endpoint=http://localhost:8085
+        -Dapiman.auth.private-endpoint=http://keycloak:8080
+        -DallowSelfSigned=${SELF_SIGNED}
+        -DallowAnyHost=${SELF_SIGNED}
+    volumes:
+      - type: bind
+        source: "$PWD/data/conf-es.json"
+        target: /opt/apiman/configs/conf-es.json
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:14
+    environment:
+      - 'POSTGRES_MULTIPLE_DATABASES=apiman,${POSTGRES_KEYCLOAK_DATABASE}'
+      - 'POSTGRES_USERNAME=${POSTGRES_USERNAME}'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+    volumes:
+      - type: bind
+        source: "$PWD/common/create-multiple-postgresql-databases.sh"
+        target: /docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgres
+    restart: unless-stopped
+
+  elasticsearch:
+    image: elasticsearch:7.17.10
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms${ELASTICSEARCH_JAVA_MEMORY} -Xmx${ELASTICSEARCH_JAVA_MEMORY}
+      - xpack.security.enabled=false
+    volumes:
+      - type: volume
+        source: elasticsearch_data
+        target: /usr/share/elasticsearch/data
+    healthcheck:
+      test: curl -s http://elasticsearch:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.2
+    depends_on:
+      - postgres
+    ports:
+      - "8085:8080" # Keycloak expuesto en el 8085
+    entrypoint: [ '/bin/bash', '-c' ]
+    command:
+      - |
+        cd /opt/keycloak
+        ./bin/kc.sh build
+        ./bin/kc.sh start-dev --import-realm --log=console --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true
+    environment:
+      - 'KEYCLOAK_REALM=${KEYCLOAK_REALM}'
+      - 'KEYCLOAK_APIMAN_API_SECRET=${KEYCLOAK_APIMAN_API_SECRET}'
+      - 'KEYCLOAK_APIMAN_UI_SECRET=${KEYCLOAK_APIMAN_UI_SECRET}'
+      - 'KEYCLOAK_GATEWAY_SECRET=${KEYCLOAK_GATEWAY_SECRET}'
+      - 'KEYCLOAK_REALM_CERTIFICATE=${KEYCLOAK_REALM_CERTIFICATE}'
+      - 'KEYCLOAK_REALM_PRIVATE_KEY=${KEYCLOAK_REALM_PRIVATE_KEY}'
+      - 'KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN_USERNAME}'
+      - 'KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}'
+      - 'KC_HOSTNAME=localhost' # Obligamos a Keycloak a usar localhost
+      - 'KC_HOSTNAME_PORT=8085'
+      - 'KC_HOSTNAME_STRICT=false'
+      - 'KC_HTTP_ENABLED=true'
+      - 'KC_HTTP_PORT=8080'
+      - 'KC_PROXY=none' # Cero proxy, conexión directa
+      - 'KC_DB=postgres'
+      - 'KC_DB_SCHEMA=public'
+      - 'KC_DB_URL=jdbc:postgresql://postgres:5432/${POSTGRES_KEYCLOAK_DATABASE}'
+      - 'KC_DB_USERNAME=${POSTGRES_KEYCLOAK_USER}'
+      - 'KC_DB_PASSWORD=${POSTGRES_KEYCLOAK_PASSWORD}'
+      - 'JDBC_PARAMS="useSSL=false"'
+    volumes:
+      - type: bind
+        source: "$PWD/data/apiman-realm-for-keycloak.json"
+        target: /opt/keycloak/data/import/apiman-realm-for-keycloak.json
+      - type: bind
+        source: "$PWD/data/apiman-keycloak-theme.jar"
+        target: /opt/keycloak/providers/apiman-keycloak-theme.jar
+    restart: unless-stopped
+
+volumes:
+  elasticsearch_data:
+  postgres_data:

@@ -8,14 +8,20 @@ Esta guía explica cómo publicar la API `transportFleet` en APIMan, aplicar pol
 
 ```bash
 # Desde la carpeta raíz del proyecto
-docker-compose -f docker-compose.apiman.yml up -d
+docker compose --env-file .env.apiman -f docker-compose.apiman.yml down -v
+docker compose --env-file .env.apiman -f docker-compose.apiman.yml pull
+docker compose --env-file .env.apiman -f docker-compose.apiman.yml up -d
 ```
 
-Espera ~60 segundos hasta que el contenedor arranque. Después accede a:
+Si tu instalación usa el comando antiguo, sustituye `docker compose` por `docker-compose`.
 
-- **Consola de gestión**: `http://localhost:8085/apimanui`
+Espera ~60-120 segundos hasta que el stack arranque. Después accede a:
+
+- **Consola de gestión**: `http://localhost:8081/apimanui`
   - Usuario: `admin`
   - Contraseña: `admin123!`
+- **Gateway**: `http://localhost:8082`
+- **Keycloak** (login interno): `http://localhost:8085`
 
 > [!IMPORTANT]
 > Asegúrate de que la aplicación `transportFleet` también esté corriendo en `http://localhost:8080` antes de continuar.
@@ -24,7 +30,7 @@ Espera ~60 segundos hasta que el contenedor arranque. Después accede a:
 
 ## Paso 2: Publicar la API en APIMan
 
-1. Entra en la consola de gestión en `http://localhost:8085/apimanui`
+1. Entra en la consola de gestión en `http://localhost:8081/apimanui`
 2. Crea una **Organización** → nombre: `svalero`
 3. Entra en la organización → **APIs → Nueva API**:
    - **Nombre**: `transportFleet`
@@ -76,7 +82,7 @@ Restringe qué IPs pueden acceder a la API.
 
 La URL del gateway tendrá el formato:
 ```
-http://localhost:8085/apiman-gateway/svalero/transportFleet/1.0/v2/drivers
+http://localhost:8082/svalero/transportFleet/1.0/v2/drivers
 ```
 
 ---
@@ -91,7 +97,7 @@ Todas las peticiones al gateway deben incluir la cabecera:
 
 Ejemplo de petición GET:
 ```
-GET http://localhost:8085/apiman-gateway/svalero/transportFleet/1.0/v2/drivers
+GET http://localhost:8082/svalero/transportFleet/1.0/v2/drivers
 X-API-Key: <tu-api-key>
 ```
 
@@ -103,7 +109,7 @@ X-API-Key: <tu-api-key>
 Postman / Cliente
       │  X-API-Key: <token>
       ▼
-[APIMan Gateway :8085]
+[APIMan Gateway :8082]
   │  Política 1: Rate Limiting (100 req/min)
   │  Política 2: IP Allowlist
       ▼

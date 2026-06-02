@@ -253,7 +253,7 @@
     },
     {
       "name": "APIMan Gateway",
-      "description": "Peticiones a través del gateway de APIMan. Requiere APIMan corriendo en :8085 y una API Key válida. Configura la variable de entorno 'apiKey' antes de ejecutar.",
+      "description": "Peticiones a través del gateway de APIMan. Requiere APIMan Gateway corriendo en :8082 y una API Key válida. Configura la variable de entorno 'apiKey' antes de ejecutar.",
       "item": [
         {
           "name": "GET Drivers via APIMan Gateway",
@@ -284,14 +284,13 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8085/apiman-gateway/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
-              "port": "8085",
+              "port": "8082",
               "path": [
-                "apiman-gateway",
                 "svalero",
                 "transportFleet",
                 "1.0",
@@ -339,14 +338,13 @@
               "raw": "{\n    \"name\": \"Gateway\",\n    \"surname\": \"Test\",\n    \"licenseCategory\": \"B\",\n    \"birthDate\": \"1995-06-15\",\n    \"type\": \"Fijo\",\n    \"experience\": 3,\n    \"height\": 1.70,\n    \"active\": true\n}"
             },
             "url": {
-              "raw": "http://localhost:8085/apiman-gateway/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
-              "port": "8085",
+              "port": "8082",
               "path": [
-                "apiman-gateway",
                 "svalero",
                 "transportFleet",
                 "1.0",
@@ -375,14 +373,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8085/apiman-gateway/svalero/transportFleet/1.0/v2/drivers",
+              "raw": "http://localhost:8082/svalero/transportFleet/1.0/v2/drivers",
               "protocol": "http",
               "host": [
                 "localhost"
               ],
-              "port": "8085",
+              "port": "8082",
               "path": [
-                "apiman-gateway",
                 "svalero",
                 "transportFleet",
                 "1.0",
