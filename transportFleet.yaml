@@ -4,7 +4,7 @@ info:
   description: API de gestión de flota de transportes.
   version: 1.0.0
 servers:
-  - url: 'https://transportFleet.com'
+  - url: 'http://localhost:8080'
 paths:
   /routes:
     get:
