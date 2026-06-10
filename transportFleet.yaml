@@ -8,6 +8,8 @@ servers:
 paths:
   /routes:
     get:
+      tags:
+        - Routes
       summary: Lista de rutas
       description: | 
         Nos devuelve una lista completa con todas las rutas. 
@@ -48,6 +50,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     post:
+      tags:
+        - Routes
       summary: Registrar ruta
       description: Nos permite registrar una nueva ruta en nuestra base de datos.
       requestBody:
@@ -77,6 +81,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /routes/{id}:
     get:
+      tags:
+        - Routes
       summary: Vista de una ruta
       description: Devuelve la vista detallada de una ruta. Búsqueda por Id
       responses:
@@ -107,6 +113,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     put:
+      tags:
+        - Routes
       summary: Editar una ruta
       description: Modifica los datos de una ruta por Id.
       requestBody:
@@ -141,6 +149,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     delete:
+      tags:
+        - Routes
       summary: Borrar ruta
       description: Elimina una ruta por Id.
       responses:
@@ -166,6 +176,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /stations:
     get:
+      tags:
+        - Stations
       summary: Lista de estaciones
       description: |
         Nos devuelve una lista con todas las estaciones.
@@ -204,6 +216,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     post:
+      tags:
+        - Stations
       summary: Registrar estación
       description: Registra una estación.
       requestBody:
@@ -233,6 +247,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /stations/{id}:
     get:
+      tags:
+        - Stations
       summary: Vista de una estación
       description: Detalle de una estación por Id.
       responses:
@@ -263,6 +279,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     put:
+      tags:
+        - Stations
       summary: Editar una estación
       description: Modifica una estación por Id.
       requestBody:
@@ -297,6 +315,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     delete:
+      tags:
+        - Stations
       summary: Borrar estación
       description: Elimina una estación por Id.
       responses:
@@ -322,6 +342,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /drivers:
     get:
+      tags:
+        - Drivers
       summary: Lista de conductores
       description: |
         Nos devuelve una lista completa con todos los conductores.
@@ -360,6 +382,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     post:
+      tags:
+        - Drivers
       summary: Registrar conductor
       description: Registra un nuevo conductor.
       requestBody:
@@ -389,6 +413,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /drivers/{id}:
     get:
+      tags:
+        - Drivers
       summary: Vista de un conductor
       description: Detalle de un conductor por Id.
       responses:
@@ -419,6 +445,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     put:
+      tags:
+        - Drivers
       summary: Editar un conductor
       description: Modifica un conductor por Id.
       requestBody:
@@ -453,6 +481,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     delete:
+      tags:
+        - Drivers
       summary: Borrar conductor
       description: Elimina un conductor por Id.
       responses:
@@ -478,6 +508,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /feedbacks:
     get:
+      tags:
+        - Feedbacks
       summary: Lista de feedbacks.
       description: Nos devuelve una lista completa con todos los feedbacks.
       parameters:
@@ -516,6 +548,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     post:
+      tags:
+        - Feedbacks
       summary: Registrar feedback
       description: Registra un nuevo feedback.
       requestBody:
@@ -545,6 +579,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /feedbacks/{id}:
     get:
+      tags:
+        - Feedbacks
       summary: Vista de un feedback
       description: Detalle de un feedback por Id.
       responses:
@@ -575,6 +611,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     put:
+      tags:
+        - Feedbacks
       summary: Editar un feedback
       description: Modifica un feedback por Id.
       requestBody:
@@ -609,6 +647,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     delete:
+      tags:
+        - Feedbacks
       summary: Borrar feedback
       description: Elimina un feedback por Id.
       responses:
@@ -634,6 +674,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /users:
     get:
+      tags:
+        - Users
       summary: Lista de usuarios
       description: Nos devuelve una lista con todos los usuarios.
       parameters:
@@ -671,6 +713,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     post:
+      tags:
+        - Users
       summary: Registrar usuario
       description: Registra un nuevo usuario.
       requestBody:
@@ -700,6 +744,8 @@ paths:
                 $ref: '#/components/schemas/InternalServerError'
   /users/{id}:
     get:
+      tags:
+        - Users
       summary: Vista de un usuario
       description: Detalle de un usuario por Id.
       responses:
@@ -730,6 +776,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     put:
+      tags:
+        - Users
       summary: Editar un usuario
       description: Modifica un usuario por Id.
       requestBody:
@@ -764,6 +812,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
     delete:
+      tags:
+        - Users
       summary: Borrar usuario
       description: Elimina un usuario por Id.
       responses:
@@ -811,6 +861,12 @@ components:
           format: float
         availability:
           type: boolean
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     RouteInDto:
       type: object
       required:
@@ -839,13 +895,48 @@ components:
           items:
             type: integer
             format: int64
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     RouteModifyInDto:
-      allOf:
-        - $ref: '#/components/schemas/RouteInDto'
       type: object
+      required:
+        - name
+        - category
       properties:
+        name:
+          type: string
+        description:
+          type: string
+        routeDate:
+          type: string
+          format: date
+        category:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: number
+          format: float
         availability:
           type: boolean
+        stationId:
+          type: integer
+          format: int64
+        driversIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     RouteOutDto:
       type: object
       properties:
@@ -868,6 +959,17 @@ components:
           format: float
         availability:
           type: boolean
+        driversIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
     Station:
       type: object
       required:
